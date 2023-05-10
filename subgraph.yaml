@@ -1,0 +1,44 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: ChainlinkPriceAggregatorETH
+    network: mainnet
+    source:
+      address: "0xE62B71cf983019BFf55bC83B48601ce8419650CC"
+      abi: ChainlinkPriceAggregatorETH
+      startBlock: 17229079
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Price
+      abis:
+        - name: ChainlinkPriceAggregatorETH
+          file: ./abis/ChainlinkPriceAggregator.json
+      eventHandlers:
+        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
+          handler: handleEthPriceUpdated
+      file: ./src/prices.ts
+  - kind: ethereum
+    name: ChainlinkPriceAggregatorStETH
+    network: mainnet
+    source:
+      address: "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196"
+      abi: ChainlinkPriceAggregatorStETH
+      startBlock: 17229079
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Price
+      abis:
+        - name: ChainlinkPriceAggregatorStETH
+          file: ./abis/ChainlinkPriceAggregator.json
+      eventHandlers:
+        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
+          handler: handleStEthPriceUpdated
+      file: ./src/prices.ts

@@ -1,0 +1,26 @@
+{
+  "name": "@raft-fi/subgraph",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "lint": "npm run lint:prettier && npm run lint:eslint",
+    "lint:eslint": "npx eslint \"**/*.{js,ts}\"",
+    "lint:prettier": "npx prettier \"**/*.{md,json,yml}\"",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ raft-test",
+    "create-local": "graph create --node http://localhost:8020/ raft-test",
+    "remove-local": "graph remove --node http://localhost:8020/ raft-test",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 raft-test",
+    "test": "graph test"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.49.0",
+    "@graphprotocol/graph-ts": "0.29.1"
+  },
+  "devDependencies": {
+    "matchstick-as": "0.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "eslint": "^8.39.0",
+    "prettier": "^2.8.8"
+  }
+}
