@@ -1,0 +1,5 @@
+type Price @entity {
+  id: ID!
+  value: BigInt!
+  updatedAt: BigInt!
+}

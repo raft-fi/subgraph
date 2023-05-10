@@ -1,0 +1,12 @@
+{
+  "mainnet": {
+    "ChainlinkPriceAggregatorETH": {
+      "address": "0xE62B71cf983019BFf55bC83B48601ce8419650CC",
+      "startBlock": 17229079
+    },
+    "ChainlinkPriceAggregatorStETH": {
+      "address": "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196",
+      "startBlock": 17229079
+    }
+  }
+}
