@@ -1,3 +1,25 @@
+enum PositionTransactionType {
+  OPEN
+  ADJUST
+  CLOSE
+}
+
+type PositionTransaction @entity {
+  id: ID!
+  type: PositionTransactionType!
+  position: Position!
+  collateralToken: String!
+  collateralChange: BigInt!
+  debtChange: BigInt!
+  createdAt: BigInt!
+}
+
+type Position @entity {
+  id: ID!
+  collateralToken: String
+  transactions: [PositionTransaction!]! @derivedFrom(field: "position")
+}
+
 type Price @entity {
   id: ID!
   value: BigInt!
