@@ -3,3 +3,8 @@ type Price @entity {
   value: BigInt!
   updatedAt: BigInt!
 }
+
+type RaftDebtTokenHolder @entity {
+  id: ID!
+  balance: BigInt!
+}
