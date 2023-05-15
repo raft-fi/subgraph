@@ -2,64 +2,63 @@ specVersion: 0.0.5
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum
-    name: ChainlinkPriceAggregatorETH
-    network: mainnet
-    source:
-      address: "0xE62B71cf983019BFf55bC83B48601ce8419650CC"
-      abi: ChainlinkPriceAggregatorETH
-      startBlock: 17229079
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Price
-      abis:
-        - name: ChainlinkPriceAggregatorETH
-          file: ./abis/ChainlinkPriceAggregator.json
-      eventHandlers:
-        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
-          handler: handleEthPriceUpdated
-      file: ./src/prices.ts
-  - kind: ethereum
-    name: ChainlinkPriceAggregatorStETH
-    network: mainnet
-    source:
-      address: "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196"
-      abi: ChainlinkPriceAggregatorStETH
-      startBlock: 17229079
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Price
-      abis:
-        - name: ChainlinkPriceAggregatorStETH
-          file: ./abis/ChainlinkPriceAggregator.json
-      eventHandlers:
-        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
-          handler: handleStEthPriceUpdated
-      file: ./src/prices.ts
-  # Once raft debt token is deployed to mainnet, uncomment this and update address and start block
   #- kind: ethereum
-    #name: RaftDebtTokenHolders
-    #network: goerli
+    #name: ChainlinkPriceAggregatorETH
+    #network: mainnet
     #source:
-      #address: "0x8f616D781e799fE8e150AE98F3e233722007e536"
-      #abi: ERC20Indexable
-      #startBlock: 8946801
+      #address: "0xE62B71cf983019BFf55bC83B48601ce8419650CC"
+      #abi: ChainlinkPriceAggregatorETH
+      #startBlock: 17229079
     #mapping:
       #kind: ethereum/events
       #apiVersion: 0.0.7
       #language: wasm/assemblyscript
       #entities:
-        #- RaftDebtTokenHolder
+        #- Price
       #abis:
-        #- name: ERC20Indexable
-          #file: ./abis/ERC20Indexable.json
+        #- name: ChainlinkPriceAggregatorETH
+          #file: ./abis/ChainlinkPriceAggregator.json
       #eventHandlers:
-        #- event: Transfer(indexed address,indexed address,uint256)
-          #handler: handleDebtTokenTransfer
-      #file: ./src/holders.ts
+        #- event: AnswerUpdated(indexed int256,indexed uint256,uint256)
+          #handler: handleEthPriceUpdated
+      #file: ./src/prices.ts
+  #- kind: ethereum
+    #name: ChainlinkPriceAggregatorStETH
+    #network: mainnet
+    #source:
+      #address: "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196"
+      #abi: ChainlinkPriceAggregatorStETH
+      #startBlock: 17229079
+    #mapping:
+      #kind: ethereum/events
+      #apiVersion: 0.0.7
+      #language: wasm/assemblyscript
+      #entities:
+        #- Price
+      #abis:
+        #- name: ChainlinkPriceAggregatorStETH
+          #file: ./abis/ChainlinkPriceAggregator.json
+      #eventHandlers:
+        #- event: AnswerUpdated(indexed int256,indexed uint256,uint256)
+          #handler: handleStEthPriceUpdated
+      #file: ./src/prices.ts
+  - kind: ethereum
+    name: RaftDebtTokenHolders
+    network: goerli
+    source:
+      address: "0x8f616D781e799fE8e150AE98F3e233722007e536"
+      abi: ERC20Indexable
+      startBlock: 8946801
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - RaftDebtTokenHolder
+      abis:
+        - name: ERC20Indexable
+          file: ./abis/ERC20Indexable.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleDebtTokenTransfer
+      file: ./src/holders.ts
