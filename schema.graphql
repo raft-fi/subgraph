@@ -2,6 +2,7 @@ enum PositionTransactionType {
   OPEN
   ADJUST
   CLOSE
+  LIQUIDATION
 }
 
 type PositionTransaction @entity {
@@ -11,13 +12,21 @@ type PositionTransaction @entity {
   collateralToken: String!
   collateralChange: BigInt!
   debtChange: BigInt!
-  createdAt: BigInt!
+  timestamp: BigInt!
 }
 
 type Position @entity {
   id: ID!
   collateralToken: String
   transactions: [PositionTransaction!]! @derivedFrom(field: "position")
+  liquidations: [Liquidation!]! @derivedFrom(field: "position")
+}
+
+type Liquidation @entity {
+  id: ID!
+  position: Position!
+  liquidator: String!
+  transaction: PositionTransaction!
 }
 
 type Price @entity {

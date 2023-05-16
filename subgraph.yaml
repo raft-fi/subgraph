@@ -28,6 +28,8 @@ dataSources:
           handler: handlePositionCollateralChanged
         - event: DebtChanged(indexed address,uint256,bool)
           handler: handlePositionDebtChanged
+        - event: Liquidation(indexed address,indexed address,indexed address,uint256,uint256,uint256,uint256,bool)
+          handler: handleLiquidation
       file: ./src/positions.ts
 #   - kind: ethereum
 #     name: ChainlinkPriceAggregatorETH
