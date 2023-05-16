@@ -5,9 +5,13 @@ import {
   PositionClosed,
   PositionCreated,
 } from '../generated/PositionManager/PositionManager';
-import { Position, PositionTransaction } from '../generated/schema';
+import { OpenPositionCounter, Position, PositionTransaction } from '../generated/schema';
+
+const OPEN_POSITIONS_COUNTER_ID = 'raft-open-positions-counter';
 
 export function handlePositionCreated(event: PositionCreated): void {
+  handlePositionCountChange(true);
+
   const transactionHash = event.transaction.hash.toHexString();
   const positionTransaction = PositionTransaction.load(transactionHash);
 
@@ -25,6 +29,8 @@ export function handlePositionCreated(event: PositionCreated): void {
 }
 
 export function handlePositionClosed(event: PositionClosed): void {
+  handlePositionCountChange(false);
+
   const transactionHash = event.transaction.hash.toHexString();
   const positionTransaction = PositionTransaction.load(transactionHash);
 
@@ -96,4 +102,29 @@ function createPositionTransaction(
   positionTransaction.createdAt = timestamp;
 
   return positionTransaction;
+}
+
+function loadOrCreateOpenPositionCounter(): OpenPositionCounter {
+  const loadedOpenPositionCounter = OpenPositionCounter.load(OPEN_POSITIONS_COUNTER_ID);
+
+  if (loadedOpenPositionCounter) {
+    return loadedOpenPositionCounter;
+  }
+
+  const openPositionCounter = new OpenPositionCounter(OPEN_POSITIONS_COUNTER_ID);
+  openPositionCounter.count = BigInt.fromI32(0);
+
+  return openPositionCounter;
+}
+
+function handlePositionCountChange(increase: boolean): void {
+  const openPositionCounter = loadOrCreateOpenPositionCounter();
+
+  if (increase) {
+    openPositionCounter.count = openPositionCounter.count.plus(BigInt.fromI32(1));
+  } else {
+    openPositionCounter.count = openPositionCounter.count.minus(BigInt.fromI32(1));
+  }
+
+  openPositionCounter.save();
 }
