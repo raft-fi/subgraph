@@ -25,3 +25,8 @@ type Price @entity {
   value: BigInt!
   updatedAt: BigInt!
 }
+
+type OpenPositionCounter @entity {
+  id: ID!
+  count: BigInt!
+}
