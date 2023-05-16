@@ -21,11 +21,14 @@ export function handlePositionCreated(event: PositionCreated): void {
     return;
   }
 
+  const collateralToken = event.params.collateralToken.toHexString();
+
   positionTransaction.type = 'OPEN';
+  positionTransaction.collateralToken = collateralToken;
   positionTransaction.save();
 
   const position = loadPosition(event.params.position.toHexString());
-  position.collateralToken = event.params.collateralToken.toHexString();
+  position.collateralToken = collateralToken;
   position.save();
 }
 
