@@ -2,10 +2,11 @@ import { BigInt, log } from '@graphprotocol/graph-ts';
 import {
   CollateralChanged,
   DebtChanged,
+  Liquidation as LiquidationEvent,
   PositionClosed,
   PositionCreated,
 } from '../generated/PositionManager/PositionManager';
-import { OpenPositionCounter, Position, PositionTransaction } from '../generated/schema';
+import { Liquidation, OpenPositionCounter, Position, PositionTransaction } from '../generated/schema';
 
 const OPEN_POSITIONS_COUNTER_ID = 'raft-open-positions-counter';
 
@@ -32,17 +33,15 @@ export function handlePositionClosed(event: PositionClosed): void {
   handlePositionCountChange(false);
 
   const transactionHash = event.transaction.hash.toHexString();
-  const positionTransaction = PositionTransaction.load(transactionHash);
-
-  if (!positionTransaction) {
-    log.warning('handlePositionClosed: Transaction with {} hash not found', [transactionHash]);
-    return;
-  }
+  const position = loadPosition(event.params.position.toHexString());
+  const createdPositionTransaction = PositionTransaction.load(transactionHash);
+  const positionTransaction = createdPositionTransaction
+    ? createdPositionTransaction
+    : createPositionTransaction(transactionHash, position, event.block.timestamp);
 
   positionTransaction.type = 'CLOSE';
   positionTransaction.save();
 
-  const position = loadPosition(event.params.position.toHexString());
   position.collateralToken = null;
   position.save();
 }
@@ -79,6 +78,26 @@ export function handlePositionDebtChanged(event: DebtChanged): void {
   positionTransaction.save();
 }
 
+export function handleLiquidation(event: LiquidationEvent): void {
+  const positionTransactionHash = event.transaction.hash.toHexString();
+  const positionTransaction = PositionTransaction.load(positionTransactionHash);
+
+  if (!positionTransaction) {
+    log.warning('handleLiquidation: Transaction with {} hash not found', [positionTransactionHash]);
+    return;
+  }
+
+  positionTransaction.type = 'LIQUIDATION';
+  positionTransaction.collateralChange = event.params.collateralLiquidated.neg();
+  positionTransaction.debtChange = event.params.debtLiquidated.neg();
+  positionTransaction.save();
+
+  const liquidation = new Liquidation(positionTransactionHash);
+  liquidation.position = positionTransaction.position;
+  liquidation.liquidator = event.params.liquidator.toHexString();
+  liquidation.transaction = positionTransaction.id;
+}
+
 function loadPosition(positionId: string): Position {
   const savedPosition = Position.load(positionId);
 
@@ -99,7 +118,7 @@ function createPositionTransaction(
   positionTransaction.collateralToken = position.collateralToken ? (position.collateralToken as string) : '';
   positionTransaction.collateralChange = BigInt.fromI32(0);
   positionTransaction.debtChange = BigInt.fromI32(0);
-  positionTransaction.createdAt = timestamp;
+  positionTransaction.timestamp = timestamp;
 
   return positionTransaction;
 }
