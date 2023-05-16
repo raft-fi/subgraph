@@ -104,7 +104,7 @@ function createPositionTransaction(
   return positionTransaction;
 }
 
-function loadOpenPositionCounter(): OpenPositionCounter {
+function loadOrCreateOpenPositionCounter(): OpenPositionCounter {
   const loadedOpenPositionCounter = OpenPositionCounter.load(OPEN_POSITIONS_COUNTER_ID);
 
   if (loadedOpenPositionCounter) {
@@ -118,7 +118,7 @@ function loadOpenPositionCounter(): OpenPositionCounter {
 }
 
 function handlePositionCountChange(increase: boolean): void {
-  const openPositionCounter = loadOpenPositionCounter();
+  const openPositionCounter = loadOrCreateOpenPositionCounter();
 
   if (increase) {
     openPositionCounter.count = openPositionCounter.count.plus(BigInt.fromI32(1));
