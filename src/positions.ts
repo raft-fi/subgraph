@@ -99,6 +99,7 @@ export function handleLiquidation(event: LiquidationEvent): void {
   liquidation.position = positionTransaction.position;
   liquidation.liquidator = event.params.liquidator.toHexString();
   liquidation.transaction = positionTransaction.id;
+  liquidation.save();
 }
 
 function loadPosition(positionId: string): Position {
