@@ -6,9 +6,9 @@ dataSources:
     name: PositionManager
     network: goerli
     source:
-      address: '0x30C7C81f13c9F873630559BE4B14C4c07F065319'
+      address: '0xeaf8aad45d563f14d8b443277dd51c426ad8607f'
       abi: PositionManager
-      startBlock: 9003056
+      startBlock: 9055700
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -22,11 +22,11 @@ dataSources:
       eventHandlers:
         - event: PositionCreated(indexed address,indexed address)
           handler: handlePositionCreated
-        - event: PositionClosed(indexed address,indexed address)
+        - event: PositionClosed(indexed address)
           handler: handlePositionClosed
-        - event: CollateralChanged(indexed address,uint256,bool)
+        - event: CollateralChanged(indexed address,indexed address,uint256,bool)
           handler: handlePositionCollateralChanged
-        - event: DebtChanged(indexed address,uint256,bool)
+        - event: DebtChanged(indexed address,indexed address,uint256,bool)
           handler: handlePositionDebtChanged
         - event: Liquidation(indexed address,indexed address,indexed address,uint256,uint256,uint256,uint256,bool)
           handler: handleLiquidation
