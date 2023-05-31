@@ -1,12 +1,6 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "contract ISplitLiquidationCollateral",
-        "name": "newSplitLiquidationCollateral",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -159,6 +153,22 @@
     "type": "error"
   },
   {
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "newTotalDebt",
+        "type": "uint256"
+      }
+    ],
+    "name": "TotalDebtCannotBeLowerThanMinDebt",
+    "type": "error"
+  },
+  {
     "inputs": [],
     "name": "WrongCollateralParamsForFullRepayment",
     "type": "error"
@@ -166,6 +176,12 @@
   {
     "anonymous": false,
     "inputs": [
+      {
+        "indexed": false,
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
       {
         "indexed": false,
         "internalType": "uint256",
@@ -196,6 +212,12 @@
         "indexed": true,
         "internalType": "address",
         "name": "position",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
         "type": "address"
       },
       {
@@ -231,6 +253,12 @@
       },
       {
         "indexed": false,
+        "internalType": "contract IERC20Indexable",
+        "name": "raftDebtToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "contract IPriceFeed",
         "name": "priceFeed",
         "type": "address"
@@ -250,12 +278,6 @@
       },
       {
         "indexed": false,
-        "internalType": "contract IERC20Indexable",
-        "name": "raftCollateralToken",
-        "type": "address"
-      },
-      {
-        "indexed": false,
         "internalType": "bool",
         "name": "isEnabled",
         "type": "bool"
@@ -271,6 +293,12 @@
         "indexed": true,
         "internalType": "address",
         "name": "position",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
         "type": "address"
       },
       {
@@ -330,6 +358,12 @@
   {
     "anonymous": false,
     "inputs": [
+      {
+        "indexed": false,
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
       {
         "indexed": false,
         "internalType": "uint256",
@@ -441,12 +475,6 @@
         "internalType": "address",
         "name": "position",
         "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "contract IERC20",
-        "name": "collateralToken",
-        "type": "address"
       }
     ],
     "name": "PositionClosed",
@@ -482,12 +510,6 @@
       },
       {
         "indexed": false,
-        "internalType": "contract IERC20Indexable",
-        "name": "raftDebtToken",
-        "type": "address"
-      },
-      {
-        "indexed": false,
         "internalType": "address",
         "name": "feeRecipient",
         "type": "address"
@@ -499,6 +521,12 @@
   {
     "anonymous": false,
     "inputs": [
+      {
+        "indexed": false,
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
       {
         "indexed": true,
         "internalType": "address",
@@ -570,6 +598,12 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "redemptionSpread",
         "type": "uint256"
@@ -582,6 +616,12 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
         "indexed": true,
         "internalType": "contract ISplitLiquidationCollateral",
         "name": "newSplitLiquidationCollateral",
@@ -589,19 +629,6 @@
       }
     ],
     "name": "SplitLiquidationCollateralChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "totalDebt",
-        "type": "uint256"
-      }
-    ],
-    "name": "TotalDebtChanged",
     "type": "event"
   },
   {
@@ -645,33 +672,7 @@
   },
   {
     "inputs": [],
-    "name": "MAX_REDEMPTION_SPREAD",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "MINUTE_DECAY_FACTOR",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MIN_REDEMPTION_SPREAD",
     "outputs": [
       {
         "internalType": "uint256",
@@ -700,6 +701,11 @@
         "internalType": "contract IPriceFeed",
         "name": "priceFeed",
         "type": "address"
+      },
+      {
+        "internalType": "contract ISplitLiquidationCollateral",
+        "name": "newSplitLiquidationCollateral",
+        "type": "address"
       }
     ],
     "name": "addCollateralToken",
@@ -708,7 +714,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "baseRate",
     "outputs": [
       {
@@ -721,12 +733,101 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "borrowingSpread",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
+    "name": "collateralEnabled",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
+    "name": "collateralInfo",
+    "outputs": [
+      {
+        "internalType": "contract IERC20Indexable",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IERC20Indexable",
+        "name": "debtToken",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IPriceFeed",
+        "name": "priceFeed",
+        "type": "address"
+      },
+      {
+        "internalType": "contract ISplitLiquidationCollateral",
+        "name": "splitLiquidation",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "isEnabled",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastFeeOperationTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "borrowingSpread",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "baseRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "redemptionSpread",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "redemptionRebate",
         "type": "uint256"
       }
     ],
@@ -768,6 +869,11 @@
   {
     "inputs": [
       {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "debtAmount",
         "type": "uint256"
@@ -785,7 +891,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "getBorrowingRate",
     "outputs": [
       {
@@ -798,7 +910,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "getBorrowingRateWithDecay",
     "outputs": [
       {
@@ -812,6 +930,11 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
       {
         "internalType": "uint256",
         "name": "collateralAmount",
@@ -837,6 +960,11 @@
   {
     "inputs": [
       {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "collateralAmount",
         "type": "uint256"
@@ -854,7 +982,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "getRedemptionRate",
     "outputs": [
       {
@@ -867,7 +1001,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "getRedemptionRateWithDecay",
     "outputs": [
       {
@@ -904,7 +1044,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "lastFeeOperationTime",
     "outputs": [
       {
@@ -1021,24 +1167,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "collateralToken",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "isEnabled",
-        "type": "bool"
-      }
-    ],
-    "name": "modifyCollateralToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "owner",
     "outputs": [
@@ -1072,11 +1200,11 @@
         "type": "address"
       }
     ],
-    "name": "priceFeeds",
+    "name": "priceFeed",
     "outputs": [
       {
         "internalType": "contract IPriceFeed",
-        "name": "priceFeed",
+        "name": "",
         "type": "address"
       }
     ],
@@ -1104,24 +1232,25 @@
         "type": "address"
       }
     ],
-    "name": "raftCollateralTokens",
+    "name": "raftCollateralToken",
     "outputs": [
       {
         "internalType": "contract IERC20Indexable",
-        "name": "token",
+        "name": "",
         "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "isEnabled",
-        "type": "bool"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "raftDebtToken",
     "outputs": [
       {
@@ -1157,7 +1286,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "redemptionRebate",
     "outputs": [
       {
@@ -1170,7 +1305,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "redemptionSpread",
     "outputs": [
       {
@@ -1192,12 +1333,35 @@
   {
     "inputs": [
       {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "newBorrowingSpread",
         "type": "uint256"
       }
     ],
     "name": "setBorrowingSpread",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "isEnabled",
+        "type": "bool"
+      }
+    ],
+    "name": "setCollateralEnabled",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1218,6 +1382,11 @@
   {
     "inputs": [
       {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "newRedemptionRebate",
         "type": "uint256"
@@ -1230,6 +1399,11 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
       {
         "internalType": "uint256",
         "name": "newRedemptionSpread",
@@ -1244,6 +1418,11 @@
   {
     "inputs": [
       {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
         "internalType": "contract ISplitLiquidationCollateral",
         "name": "newSplitLiquidationCollateral",
         "type": "address"
@@ -1255,7 +1434,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
     "name": "splitLiquidationCollateral",
     "outputs": [
       {
