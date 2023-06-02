@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: PositionManager
-    network: goerli
+    network: mainnet
     source:
-      address: '0xeaf8aad45d563f14d8b443277dd51c426ad8607f'
       abi: PositionManager
-      startBlock: 9055700
+      address: '0x5f59b322eb3e16a0c78846195af1f588b77403fc'
+      startBlock: 17317900
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -28,46 +28,70 @@ dataSources:
           handler: handlePositionCollateralChanged
         - event: DebtChanged(indexed address,indexed address,uint256,bool)
           handler: handlePositionDebtChanged
-        - event: Liquidation(indexed address,indexed address,indexed address,uint256,uint256,uint256,uint256,bool)
+        - event: Liquidation(indexed address,indexed address,indexed
+            address,uint256,uint256,uint256,uint256,bool)
           handler: handleLiquidation
       file: ./src/positions.ts
-#   - kind: ethereum
-#     name: ChainlinkPriceAggregatorETH
-#     network: mainnet
-#     source:
-#       address: "0xE62B71cf983019BFf55bC83B48601ce8419650CC"
-#       abi: ChainlinkPriceAggregatorETH
-#       startBlock: 17229079
-#     mapping:
-#       kind: ethereum/events
-#       apiVersion: 0.0.7
-#       language: wasm/assemblyscript
-#       entities:
-#         - Price
-#       abis:
-#         - name: ChainlinkPriceAggregatorETH
-#           file: ./abis/ChainlinkPriceAggregator.json
-#       eventHandlers:
-#         - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
-#           handler: handleEthPriceUpdated
-#       file: ./src/prices.ts
-#   - kind: ethereum
-#     name: ChainlinkPriceAggregatorStETH
-#     network: mainnet
-#     source:
-#       address: "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196"
-#       abi: ChainlinkPriceAggregatorStETH
-#       startBlock: 17229079
-#     mapping:
-#       kind: ethereum/events
-#       apiVersion: 0.0.7
-#       language: wasm/assemblyscript
-#       entities:
-#         - Price
-#       abis:
-#         - name: ChainlinkPriceAggregatorStETH
-#           file: ./abis/ChainlinkPriceAggregator.json
-#       eventHandlers:
-#         - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
-#           handler: handleStEthPriceUpdated
-#       file: ./src/prices.ts
+  - kind: ethereum
+    name: PositionManagerStETH
+    network: mainnet
+    source:
+      abi: PositionManagerStETH
+      address: '0x839d6833cee34ffab6fa9057b39f02bd3091a1d6'
+      startBlock: 17371259
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Position
+        - PositionTransaction
+      abis:
+        - name: PositionManagerStETH
+          file: ./abis/PositionManagerStETH.json
+      eventHandlers:
+        - event: ETHPositionChanged(indexed address,uint256,uint256,bool)
+          handler: handleETHPositionChanged
+        - event: StETHPositionChanged(indexed address,uint256,bool,uint256,bool)
+          handler: handleStETHPositionChanged
+      file: ./src/positions.ts
+  - kind: ethereum
+    name: ChainlinkPriceAggregatorETH
+    network: mainnet
+    source:
+      address: '0xE62B71cf983019BFf55bC83B48601ce8419650CC'
+      abi: ChainlinkPriceAggregatorETH
+      startBlock: 17229079
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Price
+      abis:
+        - name: ChainlinkPriceAggregatorETH
+          file: ./abis/ChainlinkPriceAggregator.json
+      eventHandlers:
+        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
+          handler: handleEthPriceUpdated
+      file: ./src/prices.ts
+  - kind: ethereum
+    name: ChainlinkPriceAggregatorStETH
+    network: mainnet
+    source:
+      address: '0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196'
+      abi: ChainlinkPriceAggregatorStETH
+      startBlock: 17229079
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Price
+      abis:
+        - name: ChainlinkPriceAggregatorStETH
+          file: ./abis/ChainlinkPriceAggregator.json
+      eventHandlers:
+        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
+          handler: handleStEthPriceUpdated
+      file: ./src/prices.ts
