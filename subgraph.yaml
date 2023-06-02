@@ -7,7 +7,7 @@ dataSources:
     network: mainnet
     source:
       abi: PositionManager
-      address: "0x5f59b322eb3e16a0c78846195af1f588b77403fc"
+      address: '0x5f59b322eb3e16a0c78846195af1f588b77403fc'
       startBlock: 17317900
     mapping:
       kind: ethereum/events
@@ -37,7 +37,7 @@ dataSources:
     network: mainnet
     source:
       abi: PositionManagerStETH
-      address: "0x839d6833cee34ffab6fa9057b39f02bd3091a1d6"
+      address: '0x839d6833cee34ffab6fa9057b39f02bd3091a1d6'
       startBlock: 17371259
     mapping:
       kind: ethereum/events
@@ -59,7 +59,7 @@ dataSources:
     name: ChainlinkPriceAggregatorETH
     network: mainnet
     source:
-      address: "0xE62B71cf983019BFf55bC83B48601ce8419650CC"
+      address: '0xE62B71cf983019BFf55bC83B48601ce8419650CC'
       abi: ChainlinkPriceAggregatorETH
       startBlock: 17229079
     mapping:
@@ -79,7 +79,7 @@ dataSources:
     name: ChainlinkPriceAggregatorStETH
     network: mainnet
     source:
-      address: "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196"
+      address: '0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196'
       abi: ChainlinkPriceAggregatorStETH
       startBlock: 17229079
     mapping:

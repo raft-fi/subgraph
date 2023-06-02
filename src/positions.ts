@@ -162,9 +162,7 @@ function createPositionTransaction(
   positionTransaction.underlyingCollateralToken = position.underlyingCollateralToken
     ? (position.underlyingCollateralToken as string)
     : '';
-  positionTransaction.collateralToken = '';
   positionTransaction.underlyingCollateralChange = BigInt.fromI32(0);
-  positionTransaction.collateralChange = BigInt.fromI32(0);
   positionTransaction.debtChange = BigInt.fromI32(0);
   positionTransaction.timestamp = timestamp;
 

@@ -9,8 +9,8 @@ type PositionTransaction @entity {
   id: ID!
   type: PositionTransactionType!
   position: Position!
-  collateralToken: String!
-  collateralChange: BigInt!
+  collateralToken: String
+  collateralChange: BigInt
   underlyingCollateralToken: String!
   underlyingCollateralChange: BigInt!
   debtChange: BigInt!
