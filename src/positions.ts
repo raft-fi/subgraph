@@ -8,6 +8,7 @@ import {
 } from '../generated/PositionManager/PositionManager';
 import { ETHPositionChanged, StETHPositionChanged } from '../generated/PositionManagerStETH/PositionManagerStETH';
 import { Liquidation, OpenPositionCounter, Position, PositionTransaction } from '../generated/schema';
+import { WrappedCollateralTokenPositionChanged } from '../generated/PositionManagerRETH/PositionManagerWrappedCollateralToken';
 import { config } from './config';
 
 const OPEN_POSITIONS_COUNTER_ID = 'raft-open-positions-counter';
@@ -84,41 +85,52 @@ export function handlePositionDebtChanged(event: DebtChanged): void {
 }
 
 export function handleETHPositionChanged(event: ETHPositionChanged): void {
-  const positionAddress = event.params.position.toHexString();
-  const position = loadPosition(positionAddress);
-
-  const positionTransactionHash = event.transaction.hash.toHexString();
-  const createdPositionTransaction = PositionTransaction.load(positionTransactionHash);
-  const positionTransaction = createdPositionTransaction
-    ? createdPositionTransaction
-    : createPositionTransaction(positionTransactionHash, position, event.block.timestamp);
-
-  positionTransaction.collateralChange = event.params.collateralAmount;
-  // ETH is always zero address
-  positionTransaction.collateralToken = '0x0000000000000000000000000000000000000000';
-  positionTransaction.save();
+  handleDelegatePositionChange(
+    event.params.position.toHexString(),
+    event.transaction.hash.toHexString(),
+    event.block.timestamp,
+    '0x0000000000000000000000000000000000000000',
+    event.params.collateralAmount,
+    true,
+  );
 }
 
 export function handleStETHPositionChanged(event: StETHPositionChanged): void {
-  const positionAddress = event.params.position.toHexString();
-  const position = loadPosition(positionAddress);
-
-  const positionTransactionHash = event.transaction.hash.toHexString();
-  const createdPositionTransaction = PositionTransaction.load(positionTransactionHash);
-  const positionTransaction = createdPositionTransaction
-    ? createdPositionTransaction
-    : createPositionTransaction(positionTransactionHash, position, event.block.timestamp);
-
-  const amountMultiplier = event.params.isCollateralIncrease ? BigInt.fromI32(1) : BigInt.fromI32(-1);
-  positionTransaction.collateralChange = event.params.collateralAmount.times(amountMultiplier);
   const networkConfig = config.get(dataSource.network());
+  let stETHAddress = '';
 
   if (networkConfig != null) {
-    const stETHAddress = networkConfig.get('stETH');
-    positionTransaction.collateralToken = stETHAddress ? (stETHAddress as string) : '';
+    const tokenAddress = networkConfig.get('stETH');
+    stETHAddress = tokenAddress !== null ? (tokenAddress as string) : '';
   }
 
-  positionTransaction.save();
+  handleDelegatePositionChange(
+    event.params.position.toHexString(),
+    event.transaction.hash.toHexString(),
+    event.block.timestamp,
+    stETHAddress,
+    event.params.collateralAmount,
+    event.params.isCollateralIncrease,
+  );
+}
+
+export function handleRETHPositionChanged(event: WrappedCollateralTokenPositionChanged): void {
+  const networkConfig = config.get(dataSource.network());
+  let rETHAddress = '';
+
+  if (networkConfig != null) {
+    const tokenAddress = networkConfig.get('rETH');
+    rETHAddress = tokenAddress !== null ? (tokenAddress as string) : '';
+  }
+
+  handleDelegatePositionChange(
+    event.params.position.toHexString(),
+    event.transaction.hash.toHexString(),
+    event.block.timestamp,
+    rETHAddress,
+    event.params.collateralAmount,
+    event.params.isCollateralIncrease,
+  );
 }
 
 export function handleLiquidation(event: LiquidationEvent): void {
@@ -192,4 +204,25 @@ function handlePositionCountChange(increase: boolean): void {
   }
 
   openPositionCounter.save();
+}
+
+function handleDelegatePositionChange(
+  positionAddress: string,
+  transactionHash: string,
+  timestamp: BigInt, // eslint-disable-line @typescript-eslint/ban-types
+  collateralTokenAddress: string,
+  collateralAmount: BigInt, // eslint-disable-line @typescript-eslint/ban-types
+  isCollateralIncrease: bool,
+): void {
+  const position = loadPosition(positionAddress);
+  const createdPositionTransaction = PositionTransaction.load(transactionHash);
+  const positionTransaction = createdPositionTransaction
+    ? createdPositionTransaction
+    : createPositionTransaction(transactionHash, position, timestamp);
+
+  const amountMultiplier = isCollateralIncrease ? BigInt.fromI32(1) : BigInt.fromI32(-1);
+  positionTransaction.collateralChange = collateralAmount.times(amountMultiplier);
+  positionTransaction.collateralToken = collateralTokenAddress;
+
+  positionTransaction.save();
 }

@@ -8,6 +8,10 @@
       "address": "0x839d6833cee34ffab6fa9057b39f02bd3091a1d6",
       "startBlock": 17371259
     },
+    "PositionManagerRETH": {
+      "address": "0x29f8abb4cab4bbb56f617d9a3c0f62d33758e74e",
+      "startBlock": 17570096
+    },
     "ChainlinkPriceAggregatorETH": {
       "address": "0xE62B71cf983019BFf55bC83B48601ce8419650CC",
       "startBlock": 17229079
@@ -25,6 +29,10 @@
     "PositionManagerStETH": {
       "address": "0x4e01f8c03893be67b60af6a1b49d6e51a8781e3c",
       "startBlock": 9090455
+    },
+    "PositionManagerRETH": {
+      "address": "0x109a9dace6e89cc5ddffebe374e15f029f6b1440",
+      "startBlock": 9245110
     }
   }
 }

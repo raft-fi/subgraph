@@ -56,6 +56,27 @@ dataSources:
           handler: handleStETHPositionChanged
       file: ./src/positions.ts
   - kind: ethereum
+    name: PositionManagerRETH
+    network: mainnet
+    source:
+      abi: PositionManagerWrappedCollateralToken
+      address: '0x29f8abb4cab4bbb56f617d9a3c0f62d33758e74e'
+      startBlock: 17570096
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Position
+        - PositionTransaction
+      abis:
+        - name: PositionManagerWrappedCollateralToken
+          file: ./abis/PositionManagerWrappedCollateralToken.json
+      eventHandlers:
+        - event: WrappedCollateralTokenPositionChanged(indexed address,uint256,bool,uint256,bool)
+          handler: handleRETHPositionChanged
+      file: ./src/positions.ts
+  - kind: ethereum
     name: ChainlinkPriceAggregatorETH
     network: mainnet
     source:
