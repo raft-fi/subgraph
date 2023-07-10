@@ -20,6 +20,7 @@ type PositionTransaction @entity {
 type Position @entity {
   id: ID!
   underlyingCollateralToken: String
+  principalCollateral: BigInt
   transactions: [PositionTransaction!]! @derivedFrom(field: "position")
   liquidations: [Liquidation!]! @derivedFrom(field: "position")
 }
