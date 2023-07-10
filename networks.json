@@ -19,6 +19,10 @@
     "ChainlinkPriceAggregatorStETH": {
       "address": "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196",
       "startBlock": 17229079
+    },
+    "OneStepLeverageStETH": {
+      "address": "0xe16a88cfd4fe3fd1f6ae7543829a0b881cb6afe2",
+      "startBlock": 17429065
     }
   },
   "goerli": {

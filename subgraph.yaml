@@ -116,3 +116,23 @@ dataSources:
         - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
           handler: handleStEthPriceUpdated
       file: ./src/prices.ts
+  - kind: ethereum
+    name: OneStepLeverageStETH
+    network: mainnet
+    source:
+      address: '0xe16a88cfd4fe3fd1f6ae7543829a0b881cb6afe2'
+      abi: OneStepLeverageStETH
+      startBlock: 17429065
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Position
+      abis:
+        - name: OneStepLeverageStETH
+          file: ./abis/OneStepLeverageStETH.json
+      eventHandlers:
+        - event: LeveragedPositionAdjusted(indexed address,uint256,bool,uint256,bool,uint256)
+          handler: handleLeveragePositionAdjusted
+      file: ./src/positions.ts

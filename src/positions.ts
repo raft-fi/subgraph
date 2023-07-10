@@ -7,6 +7,7 @@ import {
   PositionCreated,
 } from '../generated/PositionManager/PositionManager';
 import { ETHPositionChanged, StETHPositionChanged } from '../generated/PositionManagerStETH/PositionManagerStETH';
+import { LeveragedPositionAdjusted } from '../generated/OneStepLeverageStETH/OneStepLeverageStETH';
 import { Liquidation, OpenPositionCounter, Position, PositionTransaction } from '../generated/schema';
 import { WrappedCollateralTokenPositionChanged } from '../generated/PositionManagerRETH/PositionManagerWrappedCollateralToken';
 import { config } from './config';
@@ -152,6 +153,21 @@ export function handleLiquidation(event: LiquidationEvent): void {
   liquidation.liquidator = event.params.liquidator.toHexString();
   liquidation.transaction = positionTransaction.id;
   liquidation.save();
+}
+
+export function handleLeveragePositionAdjusted(event: LeveragedPositionAdjusted): void {
+  const multiplier = event.params.principalCollateralIncrease ? BigInt.fromI32(1) : BigInt.fromI32(-1);
+  const principalCollateralAdded = event.params.principalCollateralChange.times(multiplier);
+
+  const position = loadPosition(event.params.position.toHexString());
+  if (!position.principalCollateral) {
+    position.principalCollateral = principalCollateralAdded;
+  } else {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    position.principalCollateral = principalCollateralAdded.plus(position.principalCollateral as BigInt);
+  }
+
+  position.save();
 }
 
 function loadPosition(positionId: string): Position {
