@@ -120,9 +120,9 @@ dataSources:
     name: OneStepLeverageStETH
     network: mainnet
     source:
-      address: '0xe16a88cfd4fe3fd1f6ae7543829a0b881cb6afe2'
+      address: '0xB2Bf4De5a63B2225338CdFdBAd045EA62f158b67'
       abi: OneStepLeverageStETH
-      startBlock: 17429065
+      startBlock: 17669930
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

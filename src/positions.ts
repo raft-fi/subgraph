@@ -33,6 +33,7 @@ export function handlePositionCreated(event: PositionCreated): void {
 
   const position = loadPosition(event.params.position.toHexString());
   position.underlyingCollateralToken = underlyingCollateralToken;
+  position.principalCollateral = null;
   position.save();
 }
 
@@ -50,6 +51,7 @@ export function handlePositionClosed(event: PositionClosed): void {
   positionTransaction.save();
 
   position.underlyingCollateralToken = null;
+  position.principalCollateral = null;
   position.save();
 }
 
