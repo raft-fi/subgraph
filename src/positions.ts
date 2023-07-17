@@ -29,11 +29,12 @@ export function handlePositionCreated(event: PositionCreated): void {
 
   positionTransaction.type = 'OPEN';
   positionTransaction.underlyingCollateralToken = underlyingCollateralToken;
+  positionTransaction.isLeveraged = false;
   positionTransaction.save();
 
   const position = loadPosition(event.params.position.toHexString());
   position.underlyingCollateralToken = underlyingCollateralToken;
-  position.principalCollateral = null;
+  position.isLeveraged = false;
   position.save();
 }
 
@@ -51,7 +52,7 @@ export function handlePositionClosed(event: PositionClosed): void {
   positionTransaction.save();
 
   position.underlyingCollateralToken = null;
-  position.principalCollateral = null;
+  position.isLeveraged = false;
   position.save();
 }
 
@@ -68,6 +69,7 @@ export function handlePositionCollateralChanged(event: CollateralChanged): void 
   const amountMultiplier = event.params.isCollateralIncrease ? BigInt.fromI32(1) : BigInt.fromI32(-1);
   positionTransaction.type = 'ADJUST';
   positionTransaction.underlyingCollateralChange = event.params.collateralAmount.times(amountMultiplier);
+  positionTransaction.isLeveraged = false;
   positionTransaction.save();
 }
 
@@ -84,6 +86,7 @@ export function handlePositionDebtChanged(event: DebtChanged): void {
   const amountMultiplier = event.params.isDebtIncrease ? BigInt.fromI32(1) : BigInt.fromI32(-1);
   positionTransaction.type = 'ADJUST';
   positionTransaction.debtChange = event.params.debtAmount.times(amountMultiplier);
+  positionTransaction.isLeveraged = false;
   positionTransaction.save();
 }
 
@@ -158,17 +161,16 @@ export function handleLiquidation(event: LiquidationEvent): void {
 }
 
 export function handleLeveragePositionAdjusted(event: LeveragedPositionAdjusted): void {
-  const multiplier = event.params.principalCollateralIncrease ? BigInt.fromI32(1) : BigInt.fromI32(-1);
-  const principalCollateralAdded = event.params.principalCollateralChange.times(multiplier);
+  const transactionHash = event.transaction.hash.toHexString();
+  const positionTransaction = PositionTransaction.load(transactionHash);
 
-  const position = loadPosition(event.params.position.toHexString());
-  if (!position.principalCollateral) {
-    position.principalCollateral = principalCollateralAdded;
-  } else {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    position.principalCollateral = principalCollateralAdded.plus(position.principalCollateral as BigInt);
+  if (positionTransaction) {
+    positionTransaction.isLeveraged = true;
+    positionTransaction.save();
   }
 
+  const position = loadPosition(event.params.position.toHexString());
+  position.isLeveraged = true;
   position.save();
 }
 

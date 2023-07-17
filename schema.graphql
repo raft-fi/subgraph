@@ -14,13 +14,14 @@ type PositionTransaction @entity {
   underlyingCollateralToken: String!
   underlyingCollateralChange: BigInt!
   debtChange: BigInt!
+  isLeveraged: Boolean
   timestamp: BigInt!
 }
 
 type Position @entity {
   id: ID!
   underlyingCollateralToken: String
-  principalCollateral: BigInt
+  isLeveraged: Boolean
   transactions: [PositionTransaction!]! @derivedFrom(field: "position")
   liquidations: [Liquidation!]! @derivedFrom(field: "position")
 }
