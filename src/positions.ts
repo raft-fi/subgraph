@@ -7,7 +7,10 @@ import {
   PositionCreated,
 } from '../generated/PositionManager/PositionManager';
 import { ETHPositionChanged, StETHPositionChanged } from '../generated/PositionManagerStETH/PositionManagerStETH';
-import { LeveragedPositionAdjusted } from '../generated/OneStepLeverageStETH/OneStepLeverageStETH';
+import {
+  LeveragedPositionAdjusted,
+  StETHLeveragedPositionChange,
+} from '../generated/OneStepLeverageStETH/OneStepLeverageStETH';
 import { Liquidation, OpenPositionCounter, Position, PositionTransaction } from '../generated/schema';
 import { WrappedCollateralTokenPositionChanged } from '../generated/PositionManagerRETH/PositionManagerWrappedCollateralToken';
 import { config } from './config';
@@ -135,6 +138,25 @@ export function handleRETHPositionChanged(event: WrappedCollateralTokenPositionC
     event.block.timestamp,
     rETHAddress,
     event.params.collateralAmount,
+    event.params.isCollateralIncrease,
+  );
+}
+
+export function handleStETHLeveragePositionChanged(event: StETHLeveragedPositionChange): void {
+  const networkConfig = config.get(dataSource.network());
+  let stETHAddress = '';
+
+  if (networkConfig != null) {
+    const tokenAddress = networkConfig.get('stETH');
+    stETHAddress = tokenAddress !== null ? (tokenAddress as string) : '';
+  }
+
+  handleDelegatePositionChange(
+    event.params.position.toHexString(),
+    event.transaction.hash.toHexString(),
+    event.block.timestamp,
+    stETHAddress,
+    event.params.collateralChange,
     event.params.isCollateralIncrease,
   );
 }

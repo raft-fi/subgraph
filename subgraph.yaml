@@ -135,4 +135,6 @@ dataSources:
       eventHandlers:
         - event: LeveragedPositionAdjusted(indexed address,uint256,bool,uint256,bool,uint256)
           handler: handleLeveragePositionAdjusted
+        - event: StETHLeveragedPositionChange(indexed address,uint256,bool,uint256,bool)
+          handler: handleStETHLeveragePositionChanged
       file: ./src/positions.ts
