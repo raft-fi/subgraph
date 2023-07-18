@@ -37,6 +37,18 @@
     "PositionManagerRETH": {
       "address": "0x109a9dace6e89cc5ddffebe374e15f029f6b1440",
       "startBlock": 9245110
+    },
+    "ChainlinkPriceAggregatorETH": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 9055700
+    },
+    "ChainlinkPriceAggregatorStETH": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 9055700
+    },
+    "OneStepLeverageStETH": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 9055700
     }
   }
 }
