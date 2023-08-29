@@ -1,4 +1,4 @@
-import { BigInt, log, dataSource } from '@graphprotocol/graph-ts';
+import { BigInt, log, dataSource, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import {
   CollateralChanged,
   DebtChanged,
@@ -11,8 +11,15 @@ import {
   LeveragedPositionAdjusted,
   StETHLeveragedPositionChange,
 } from '../generated/OneStepLeverageStETH/OneStepLeverageStETH';
-import { Liquidation, OpenPositionCounter, Position, PositionTransaction } from '../generated/schema';
+import {
+  Liquidation,
+  OpenPositionCounter,
+  Position,
+  PositionTransaction,
+  SavingsTransaction,
+} from '../generated/schema';
 import { WrappedCollateralTokenPositionChanged } from '../generated/PositionManagerRETH/PositionManagerWrappedCollateralToken';
+import { Deposit, Withdraw } from '../generated/SavingsR/RSavings';
 import { config } from './config';
 
 const OPEN_POSITIONS_COUNTER_ID = 'raft-open-positions-counter';
@@ -223,6 +230,19 @@ function createPositionTransaction(
   return positionTransaction;
 }
 
+function createSavingsTransaction(
+  transactionHash: string,
+  position: Position,
+  timestamp: BigInt, // eslint-disable-line @typescript-eslint/ban-types
+): SavingsTransaction {
+  const savingsTransaction = new SavingsTransaction(transactionHash);
+  savingsTransaction.position = position.id;
+  savingsTransaction.amount = BigInt.fromI32(0);
+  savingsTransaction.timestamp = timestamp;
+
+  return savingsTransaction;
+}
+
 function loadOrCreateOpenPositionCounter(): OpenPositionCounter {
   const loadedOpenPositionCounter = OpenPositionCounter.load(OPEN_POSITIONS_COUNTER_ID);
 
@@ -267,4 +287,34 @@ function handleDelegatePositionChange(
   positionTransaction.collateralToken = collateralTokenAddress;
 
   positionTransaction.save();
+}
+
+export function handleSavingsDeposit(event: Deposit): void {
+  handleSavingsTransaction(event.transaction.hash, event.block, event.params.owner, 'DEPOSIT', event.params.assets);
+}
+
+export function handleSavingsWithdraw(event: Withdraw): void {
+  handleSavingsTransaction(event.transaction.hash, event.block, event.params.owner, 'WITHDRAW', event.params.assets);
+}
+
+function handleSavingsTransaction(
+  hash: Bytes,
+  block: ethereum.Block,
+  owner: Address,
+  type: string,
+  amount: BigInt, // eslint-disable-line @typescript-eslint/ban-types
+): void {
+  const positionAddress = owner.toHexString();
+  const position = loadPosition(positionAddress);
+
+  const savingsTransactionHash = hash.toHexString();
+  const loadedSavingsTransaction = SavingsTransaction.load(savingsTransactionHash);
+  const savingsTransaction = loadedSavingsTransaction
+    ? loadedSavingsTransaction
+    : createSavingsTransaction(savingsTransactionHash, position, block.timestamp);
+
+  savingsTransaction.type = type;
+  savingsTransaction.amount = amount;
+  savingsTransaction.save();
+  position.save();
 }
