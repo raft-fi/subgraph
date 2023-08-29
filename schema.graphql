@@ -18,12 +18,26 @@ type PositionTransaction @entity {
   timestamp: BigInt!
 }
 
+enum SavingsTransactionType {
+  DEPOSIT
+  WITHDRAW
+}
+
+type SavingsTransaction @entity {
+  id: ID!
+  type: SavingsTransactionType!
+  position: Position!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
 type Position @entity {
   id: ID!
   underlyingCollateralToken: String
   isLeveraged: Boolean
   transactions: [PositionTransaction!]! @derivedFrom(field: "position")
   liquidations: [Liquidation!]! @derivedFrom(field: "position")
+  savings: [SavingsTransaction!]! @derivedFrom(field: "position")
 }
 
 type Liquidation @entity {

@@ -23,6 +23,10 @@
     "OneStepLeverageStETH": {
       "address": "0xB2Bf4De5a63B2225338CdFdBAd045EA62f158b67",
       "startBlock": 17669930
+    },
+    "SavingsR": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 17669930
     }
   },
   "goerli": {
@@ -49,6 +53,10 @@
     "OneStepLeverageStETH": {
       "address": "0x0000000000000000000000000000000000000000",
       "startBlock": 9055700
+    },
+    "SavingsR": {
+      "address": "0xdeeae93bf4bda40529fe5769dd817996e86eb4dd",
+      "startBlock": 9567222
     }
   }
 }
