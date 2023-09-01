@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: PositionManager
-    network: goerli
+    network: mainnet
     source:
       abi: PositionManager
-      address: '0xeaf8aad45d563f14d8b443277dd51c426ad8607f'
-      startBlock: 9055700
+      address: "0x5f59b322eb3e16a0c78846195af1f588b77403fc"
+      startBlock: 17317900
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -34,11 +34,11 @@ dataSources:
       file: ./src/positions.ts
   - kind: ethereum
     name: PositionManagerStETH
-    network: goerli
+    network: mainnet
     source:
       abi: PositionManagerStETH
-      address: '0x4e01f8c03893be67b60af6a1b49d6e51a8781e3c'
-      startBlock: 9090455
+      address: "0x839d6833cee34ffab6fa9057b39f02bd3091a1d6"
+      startBlock: 17371259
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -57,11 +57,11 @@ dataSources:
       file: ./src/positions.ts
   - kind: ethereum
     name: PositionManagerRETH
-    network: goerli
+    network: mainnet
     source:
       abi: PositionManagerWrappedCollateralToken
-      address: '0x109a9dace6e89cc5ddffebe374e15f029f6b1440'
-      startBlock: 9245110
+      address: "0x29f8abb4cab4bbb56f617d9a3c0f62d33758e74e"
+      startBlock: 17570096
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -73,16 +73,17 @@ dataSources:
         - name: PositionManagerWrappedCollateralToken
           file: ./abis/PositionManagerWrappedCollateralToken.json
       eventHandlers:
-        - event: WrappedCollateralTokenPositionChanged(indexed address,uint256,bool,uint256,bool)
+        - event: WrappedCollateralTokenPositionChanged(indexed
+            address,uint256,bool,uint256,bool)
           handler: handleRETHPositionChanged
       file: ./src/positions.ts
   - kind: ethereum
     name: ChainlinkPriceAggregatorETH
-    network: goerli
+    network: mainnet
     source:
       abi: ChainlinkPriceAggregatorETH
-      address: '0x0000000000000000000000000000000000000000'
-      startBlock: 9055700
+      address: "0xE62B71cf983019BFf55bC83B48601ce8419650CC"
+      startBlock: 17229079
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -98,11 +99,11 @@ dataSources:
       file: ./src/prices.ts
   - kind: ethereum
     name: ChainlinkPriceAggregatorStETH
-    network: goerli
+    network: mainnet
     source:
       abi: ChainlinkPriceAggregatorStETH
-      address: '0x0000000000000000000000000000000000000000'
-      startBlock: 9055700
+      address: "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196"
+      startBlock: 17229079
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -118,11 +119,11 @@ dataSources:
       file: ./src/prices.ts
   - kind: ethereum
     name: OneStepLeverageStETH
-    network: goerli
+    network: mainnet
     source:
       abi: OneStepLeverageStETH
-      address: '0x0000000000000000000000000000000000000000'
-      startBlock: 9055700
+      address: "0xB2Bf4De5a63B2225338CdFdBAd045EA62f158b67"
+      startBlock: 17669930
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -133,18 +134,19 @@ dataSources:
         - name: OneStepLeverageStETH
           file: ./abis/OneStepLeverageStETH.json
       eventHandlers:
-        - event: LeveragedPositionAdjusted(indexed address,uint256,bool,uint256,bool,uint256)
+        - event: LeveragedPositionAdjusted(indexed
+            address,uint256,bool,uint256,bool,uint256)
           handler: handleLeveragePositionAdjusted
         - event: StETHLeveragedPositionChange(indexed address,uint256,bool,uint256,bool)
           handler: handleStETHLeveragePositionChanged
       file: ./src/positions.ts
   - kind: ethereum
     name: SavingsR
-    network: goerli
+    network: mainnet
     source:
       abi: RSavings
-      address: '0xdeeae93bf4bda40529fe5769dd817996e86eb4dd'
-      startBlock: 9567222
+      address: "0x2ba26bae6df1153e29813d7f926143f9c94402f3"
+      startBlock: 18041978
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
