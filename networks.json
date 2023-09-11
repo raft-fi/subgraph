@@ -27,6 +27,10 @@
     "SavingsR": {
       "address": "0x2ba26bae6df1153e29813d7f926143f9c94402f3",
       "startBlock": 18041978
+    },
+    "InterestRatePositionManager": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 18041978
     }
   },
   "goerli": {
@@ -57,6 +61,10 @@
     "SavingsR": {
       "address": "0xdeeae93bf4bda40529fe5769dd817996e86eb4dd",
       "startBlock": 9567222
+    },
+    "InterestRatePositionManager": {
+      "address": "0x3d5a98c26d02cdc3bd459937b7c9ba52d86476c6",
+      "startBlock": 9675132
     }
   }
 }
