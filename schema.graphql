@@ -35,6 +35,7 @@ type Position @entity {
   id: ID!
   underlyingCollateralToken: String
   isLeveraged: Boolean
+  vaultVersion: String
   transactions: [PositionTransaction!]! @derivedFrom(field: "position")
   liquidations: [Liquidation!]! @derivedFrom(field: "position")
   savings: [SavingsTransaction!]! @derivedFrom(field: "position")
