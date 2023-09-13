@@ -29,8 +29,8 @@
       "startBlock": 18041978
     },
     "InterestRatePositionManager": {
-      "address": "0x0000000000000000000000000000000000000000",
-      "startBlock": 18041978
+      "address": "0x72505efdee61021af3592ab13a54739e672afb9a",
+      "startBlock": 18126541
     }
   },
   "goerli": {
