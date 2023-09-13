@@ -134,6 +134,11 @@ export function handlePositionCollateralChangedV1(event: CollateralChanged): voi
   const isCollateralIncrease = event.params.isCollateralIncrease;
   const collateralAmount = event.params.collateralAmount;
 
+  // Skip processing transactions from interest rate position manager
+  if (isInterestRatePositionManagerCaller(positionAddress) == true) {
+    return;
+  }
+
   handlePositionCollateralChanged(positionAddress, transactionHash, timestamp, isCollateralIncrease, collateralAmount);
 }
 
@@ -174,6 +179,11 @@ export function handlePositionDebtChangedV1(event: DebtChanged): void {
   const timestamp = event.block.timestamp;
   const isDebtIncrease = event.params.isDebtIncrease;
   const debtAmount = event.params.debtAmount;
+
+  // Skip processing transactions from interest rate position manager
+  if (isInterestRatePositionManagerCaller(positionAddress) == true) {
+    return;
+  }
 
   handlePositionDebtChanged(positionAddress, transactionHash, timestamp, isDebtIncrease, debtAmount);
 }
@@ -427,4 +437,20 @@ function handleSavingsTransaction(
   savingsTransaction.amount = amount;
   savingsTransaction.save();
   position.save();
+}
+
+function isInterestRatePositionManagerCaller(callerAddress: string): boolean {
+  const networkConfig = config.get(dataSource.network());
+  let interestRatePositionManager = '';
+
+  if (networkConfig != null) {
+    const interestRatePositionManagerAddress = networkConfig.get('interestRatePositionManager');
+    interestRatePositionManager =
+      interestRatePositionManagerAddress != null ? (interestRatePositionManagerAddress as string) : '';
+  }
+
+  if (callerAddress.toLowerCase() == interestRatePositionManager.toLowerCase()) {
+    return true;
+  }
+  return false;
 }
