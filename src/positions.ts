@@ -23,6 +23,7 @@ import {
   OpenPositionCounter,
   Position,
   PositionTransaction,
+  SaversCounter,
   SavingsBalance,
   SavingsTransaction,
 } from '../generated/schema';
@@ -32,6 +33,7 @@ import { config } from './config';
 import { ZERO_ADDRESS } from './constants';
 
 const OPEN_POSITIONS_COUNTER_ID = 'raft-open-positions-counter';
+const SAVERS_COUNTER_ID = 'r-savers-count';
 
 function handlePositionCreated(
   transactionHash: string,
@@ -348,6 +350,19 @@ function loadSavingsBalance(id: string): SavingsBalance {
   return createdSavingsBalance;
 }
 
+function loadSaversCounter(): SaversCounter {
+  const loadedSaversCounter = SaversCounter.load(SAVERS_COUNTER_ID);
+
+  if (loadedSaversCounter) {
+    return loadedSaversCounter;
+  }
+
+  const createdSaversCounter = new SaversCounter(SAVERS_COUNTER_ID);
+  createdSaversCounter.count = BigInt.fromI32(0);
+
+  return createdSaversCounter;
+}
+
 function createPositionTransaction(
   transactionHash: string,
   position: Position,
@@ -439,6 +454,13 @@ export function handleRRTransfer(event: Transfer): void {
   const fromSavingsBalance = loadSavingsBalance(fromAddress);
   const toSavingsBalance = loadSavingsBalance(toAddress);
 
+  const saversCount = loadSaversCounter();
+
+  // In case user receiving transfer is new, we need to increase current number of savers
+  if (toAddress != ZERO_ADDRESS && toSavingsBalance.balance.equals(BigInt.zero())) {
+    saversCount.count = saversCount.count.plus(BigInt.fromI32(1));
+  }
+
   if (fromAddress != ZERO_ADDRESS) {
     fromSavingsBalance.balance = fromSavingsBalance.balance.minus(event.params.value);
     fromSavingsBalance.save();
@@ -448,6 +470,13 @@ export function handleRRTransfer(event: Transfer): void {
     toSavingsBalance.balance = toSavingsBalance.balance.plus(event.params.value);
     toSavingsBalance.save();
   }
+
+  // In case user sending transfer has 0 balance remaining, we need to decrease current number of savers
+  if (fromAddress != ZERO_ADDRESS && fromSavingsBalance.balance.equals(BigInt.zero())) {
+    saversCount.count = saversCount.count.minus(BigInt.fromI32(1));
+  }
+
+  saversCount.save();
 }
 
 function handleSavingsTransaction(

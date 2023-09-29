@@ -46,6 +46,11 @@ type SavingsBalance @entity {
   balance: BigInt!
 }
 
+type SaversCounter @entity {
+  id: ID!
+  count: BigInt!
+}
+
 type Liquidation @entity {
   id: ID!
   position: Position!
