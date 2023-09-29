@@ -23,11 +23,13 @@ import {
   OpenPositionCounter,
   Position,
   PositionTransaction,
+  SavingsBalance,
   SavingsTransaction,
 } from '../generated/schema';
 import { WrappedCollateralTokenPositionChanged } from '../generated/PositionManagerRETH/PositionManagerWrappedCollateralToken';
-import { Deposit, Withdraw } from '../generated/SavingsR/RSavings';
+import { Deposit, Transfer, Withdraw } from '../generated/SavingsR/RSavings';
 import { config } from './config';
+import { ZERO_ADDRESS } from './constants';
 
 const OPEN_POSITIONS_COUNTER_ID = 'raft-open-positions-counter';
 
@@ -333,6 +335,19 @@ function loadPosition(positionId: string): Position {
   return new Position(positionId);
 }
 
+function loadSavingsBalance(id: string): SavingsBalance {
+  const loadedSavingsBalance = SavingsBalance.load(id);
+
+  if (loadedSavingsBalance) {
+    return loadedSavingsBalance;
+  }
+
+  const createdSavingsBalance = new SavingsBalance(id);
+  createdSavingsBalance.balance = BigInt.fromI32(0);
+
+  return createdSavingsBalance;
+}
+
 function createPositionTransaction(
   transactionHash: string,
   position: Position,
@@ -415,6 +430,24 @@ export function handleSavingsDeposit(event: Deposit): void {
 
 export function handleSavingsWithdraw(event: Withdraw): void {
   handleSavingsTransaction(event.transaction.hash, event.block, event.params.owner, 'WITHDRAW', event.params.assets);
+}
+
+export function handleRRTransfer(event: Transfer): void {
+  const fromAddress = event.params.from.toHexString();
+  const toAddress = event.params.to.toHexString();
+
+  const fromSavingsBalance = loadSavingsBalance(fromAddress);
+  const toSavingsBalance = loadSavingsBalance(toAddress);
+
+  if (fromAddress != ZERO_ADDRESS) {
+    fromSavingsBalance.balance = fromSavingsBalance.balance.minus(event.params.value);
+    fromSavingsBalance.save();
+  }
+
+  if (toAddress != ZERO_ADDRESS) {
+    toSavingsBalance.balance = toSavingsBalance.balance.plus(event.params.value);
+    toSavingsBalance.save();
+  }
 }
 
 function handleSavingsTransaction(

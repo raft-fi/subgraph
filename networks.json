@@ -66,5 +66,39 @@
       "address": "0x7b07fc0c5829fc8c74cc18df99c50b7d7fe830b4",
       "startBlock": 9675791
     }
+  },
+  "base": {
+    "PositionManager": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 4468122
+    },
+    "PositionManagerStETH": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 4468122
+    },
+    "PositionManagerRETH": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 4468122
+    },
+    "ChainlinkPriceAggregatorETH": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 4468122
+    },
+    "ChainlinkPriceAggregatorStETH": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 4468122
+    },
+    "OneStepLeverageStETH": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 4468122
+    },
+    "SavingsR": {
+      "address": "0xa5b3fee253f9de67201dc8572bd2cbb4a81c1bec",
+      "startBlock": 4468122
+    },
+    "InterestRatePositionManager": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 4468122
+    }
   }
 }
