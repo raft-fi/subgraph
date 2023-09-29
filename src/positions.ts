@@ -23,13 +23,17 @@ import {
   OpenPositionCounter,
   Position,
   PositionTransaction,
+  SaversCounter,
+  SavingsBalance,
   SavingsTransaction,
 } from '../generated/schema';
 import { WrappedCollateralTokenPositionChanged } from '../generated/PositionManagerRETH/PositionManagerWrappedCollateralToken';
-import { Deposit, Withdraw } from '../generated/SavingsR/RSavings';
+import { Deposit, Transfer, Withdraw } from '../generated/SavingsR/RSavings';
 import { config } from './config';
+import { ZERO_ADDRESS } from './constants';
 
 const OPEN_POSITIONS_COUNTER_ID = 'raft-open-positions-counter';
+const SAVERS_COUNTER_ID = 'r-savers-count';
 
 function handlePositionCreated(
   transactionHash: string,
@@ -333,6 +337,32 @@ function loadPosition(positionId: string): Position {
   return new Position(positionId);
 }
 
+function loadSavingsBalance(id: string): SavingsBalance {
+  const loadedSavingsBalance = SavingsBalance.load(id);
+
+  if (loadedSavingsBalance) {
+    return loadedSavingsBalance;
+  }
+
+  const createdSavingsBalance = new SavingsBalance(id);
+  createdSavingsBalance.balance = BigInt.fromI32(0);
+
+  return createdSavingsBalance;
+}
+
+function loadSaversCounter(): SaversCounter {
+  const loadedSaversCounter = SaversCounter.load(SAVERS_COUNTER_ID);
+
+  if (loadedSaversCounter) {
+    return loadedSaversCounter;
+  }
+
+  const createdSaversCounter = new SaversCounter(SAVERS_COUNTER_ID);
+  createdSaversCounter.count = BigInt.fromI32(0);
+
+  return createdSaversCounter;
+}
+
 function createPositionTransaction(
   transactionHash: string,
   position: Position,
@@ -415,6 +445,38 @@ export function handleSavingsDeposit(event: Deposit): void {
 
 export function handleSavingsWithdraw(event: Withdraw): void {
   handleSavingsTransaction(event.transaction.hash, event.block, event.params.owner, 'WITHDRAW', event.params.assets);
+}
+
+export function handleRRTransfer(event: Transfer): void {
+  const fromAddress = event.params.from.toHexString();
+  const toAddress = event.params.to.toHexString();
+
+  const fromSavingsBalance = loadSavingsBalance(fromAddress);
+  const toSavingsBalance = loadSavingsBalance(toAddress);
+
+  const saversCount = loadSaversCounter();
+
+  // In case user receiving transfer is new, we need to increase current number of savers
+  if (toAddress != ZERO_ADDRESS && toSavingsBalance.balance.equals(BigInt.zero())) {
+    saversCount.count = saversCount.count.plus(BigInt.fromI32(1));
+  }
+
+  if (fromAddress != ZERO_ADDRESS) {
+    fromSavingsBalance.balance = fromSavingsBalance.balance.minus(event.params.value);
+    fromSavingsBalance.save();
+  }
+
+  if (toAddress != ZERO_ADDRESS) {
+    toSavingsBalance.balance = toSavingsBalance.balance.plus(event.params.value);
+    toSavingsBalance.save();
+  }
+
+  // In case user sending transfer has 0 balance remaining, we need to decrease current number of savers
+  if (fromAddress != ZERO_ADDRESS && fromSavingsBalance.balance.equals(BigInt.zero())) {
+    saversCount.count = saversCount.count.minus(BigInt.fromI32(1));
+  }
+
+  saversCount.save();
 }
 
 function handleSavingsTransaction(

@@ -41,6 +41,16 @@ type Position @entity {
   savings: [SavingsTransaction!]! @derivedFrom(field: "position")
 }
 
+type SavingsBalance @entity {
+  id: ID!
+  balance: BigInt!
+}
+
+type SaversCounter @entity {
+  id: ID!
+  count: BigInt!
+}
+
 type Liquidation @entity {
   id: ID!
   position: Position!

@@ -162,6 +162,8 @@ dataSources:
           handler: handleSavingsDeposit
         - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleSavingsWithdraw
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleRRTransfer
       file: ./src/positions.ts
   - kind: ethereum
     name: InterestRatePositionManager
