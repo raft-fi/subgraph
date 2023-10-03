@@ -31,6 +31,10 @@
     "InterestRatePositionManager": {
       "address": "0x9AB6b21cDF116f611110b048987E58894786C244",
       "startBlock": 18127534
+    },
+    "CCIPOnRamp": {
+      "address": "0xe2eb229e88f56691e96bb98256707bc62160fe73",
+      "startBlock": 18029431
     }
   },
   "goerli": {
@@ -64,6 +68,10 @@
     },
     "InterestRatePositionManager": {
       "address": "0x7b07fc0c5829fc8c74cc18df99c50b7d7fe830b4",
+      "startBlock": 9675791
+    },
+    "CCIPOnRamp": {
+      "address": "0x0000000000000000000000000000000000000000",
       "startBlock": 9675791
     }
   },
@@ -99,6 +107,10 @@
     "InterestRatePositionManager": {
       "address": "0x0000000000000000000000000000000000000000",
       "startBlock": 4468122
+    },
+    "CCIPOnRamp": {
+      "address": "0xd44371bfde87f2db3ea6df242091351a06c2e181",
+      "startBlock": 3316617
     }
   }
 }

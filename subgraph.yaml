@@ -196,3 +196,24 @@ dataSources:
             address,uint256,uint256,uint256,uint256,bool)
           handler: handleLiquidationV2
       file: ./src/positions.ts
+  - kind: ethereum
+    name: CCIPOnRamp
+    network: mainnet
+    source:
+      abi: CCIPOnRamp
+      address: "0xe2eb229e88f56691e96bb98256707bc62160fe73"
+      startBlock: 18029431
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Position
+        - BridgeRequestTransaction
+      abis:
+        - name: CCIPOnRamp
+          file: ./abis/CCIPOnRamp.json
+      eventHandlers:
+        - event: CCIPSendRequested((uint64,uint64,uint256,address,uint64,uint256,bool,address,bytes,(address,uint256)[],address,bytes32))
+          handler: handleCCIPSendRequested
+      file: ./src/bridge.ts
