@@ -23,6 +23,8 @@ import {
   OpenPositionCounter,
   Position,
   PositionTransaction,
+  RaftHolder,
+  RaftHoldersCounter,
   SaversCounter,
   SavingsBalance,
   SavingsTransaction,
@@ -34,6 +36,7 @@ import { ZERO_ADDRESS } from './constants';
 
 const OPEN_POSITIONS_COUNTER_ID = 'raft-open-positions-counter';
 const SAVERS_COUNTER_ID = 'r-savers-count';
+const RAFT_HOLDERS_COUNTER_ID = 'raft-holders-count';
 
 function handlePositionCreated(
   transactionHash: string,
@@ -363,6 +366,32 @@ function loadSaversCounter(): SaversCounter {
   return createdSaversCounter;
 }
 
+function loadRaftHolder(id: string): RaftHolder {
+  const loadedRaftHolder = RaftHolder.load(id);
+
+  if (loadedRaftHolder) {
+    return loadedRaftHolder;
+  }
+
+  const createdRaftHolder = new RaftHolder(id);
+  createdRaftHolder.balance = BigInt.fromI32(0);
+
+  return createdRaftHolder;
+}
+
+function loadRaftHoldersCounter(): RaftHoldersCounter {
+  const loadedRaftHoldersCounter = RaftHoldersCounter.load(RAFT_HOLDERS_COUNTER_ID);
+
+  if (loadedRaftHoldersCounter) {
+    return loadedRaftHoldersCounter;
+  }
+
+  const createdRaftHoldersCounter = new RaftHoldersCounter(RAFT_HOLDERS_COUNTER_ID);
+  createdRaftHoldersCounter.count = BigInt.fromI32(0);
+
+  return createdRaftHoldersCounter;
+}
+
 function createPositionTransaction(
   transactionHash: string,
   position: Position,
@@ -477,6 +506,38 @@ export function handleRRTransfer(event: Transfer): void {
   }
 
   saversCount.save();
+}
+
+export function handleRaftTransfer(event: Transfer): void {
+  const fromAddress = event.params.from.toHexString();
+  const toAddress = event.params.to.toHexString();
+
+  const fromRaftHolder = loadRaftHolder(fromAddress);
+  const toRaftHolder = loadRaftHolder(toAddress);
+
+  const raftHoldersCount = loadRaftHoldersCounter();
+
+  // In case user receiving transfer is new, we need to increase current number of savers
+  if (toAddress != ZERO_ADDRESS && toRaftHolder.balance.equals(BigInt.zero())) {
+    raftHoldersCount.count = raftHoldersCount.count.plus(BigInt.fromI32(1));
+  }
+
+  if (fromAddress != ZERO_ADDRESS) {
+    fromRaftHolder.balance = fromRaftHolder.balance.minus(event.params.value);
+    fromRaftHolder.save();
+  }
+
+  if (toAddress != ZERO_ADDRESS) {
+    toRaftHolder.balance = toRaftHolder.balance.plus(event.params.value);
+    toRaftHolder.save();
+  }
+
+  // In case user sending transfer has 0 balance remaining, we need to decrease current number of savers
+  if (fromAddress != ZERO_ADDRESS && fromRaftHolder.balance.equals(BigInt.zero())) {
+    raftHoldersCount.count = raftHoldersCount.count.minus(BigInt.fromI32(1));
+  }
+
+  raftHoldersCount.save();
 }
 
 function handleSavingsTransaction(

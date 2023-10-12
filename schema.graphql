@@ -62,6 +62,16 @@ type SaversCounter @entity {
   count: BigInt!
 }
 
+type RaftHolder @entity {
+  id: ID!
+  balance: BigInt!
+}
+
+type RaftHoldersCounter @entity {
+  id: ID!
+  count: BigInt!
+}
+
 type Liquidation @entity {
   id: ID!
   position: Position!

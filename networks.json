@@ -35,6 +35,10 @@
     "CCIPOnRamp": {
       "address": "0xe2eb229e88f56691e96bb98256707bc62160fe73",
       "startBlock": 18029431
+    },
+    "RAFTToken": {
+      "address": "0x4C5Cb5D87709387f8821709f7a6664f00DcF0C93",
+      "startBlock": 17769445
     }
   },
   "goerli": {
@@ -71,6 +75,10 @@
       "startBlock": 9675791
     },
     "CCIPOnRamp": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 9675791
+    },
+    "RAFTToken": {
       "address": "0x0000000000000000000000000000000000000000",
       "startBlock": 9675791
     }
@@ -110,6 +118,10 @@
     },
     "CCIPOnRamp": {
       "address": "0xd44371bfde87f2db3ea6df242091351a06c2e181",
+      "startBlock": 3316617
+    },
+    "RAFTToken": {
+      "address": "0x0000000000000000000000000000000000000000",
       "startBlock": 3316617
     }
   }

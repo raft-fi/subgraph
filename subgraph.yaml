@@ -166,6 +166,27 @@ dataSources:
           handler: handleRRTransfer
       file: ./src/positions.ts
   - kind: ethereum
+    name: RAFTToken
+    network: mainnet
+    source:
+      abi: RAFT
+      address: "0x4C5Cb5D87709387f8821709f7a6664f00DcF0C93"
+      startBlock: 17769445
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - RaftHolder
+        - RaftHoldersCounter
+      abis:
+        - name: RAFT
+          file: ./abis/RAFT.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleRaftTransfer
+      file: ./src/positions.ts
+  - kind: ethereum
     name: InterestRatePositionManager
     network: mainnet
     source:
