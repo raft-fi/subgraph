@@ -39,6 +39,10 @@
     "RAFTToken": {
       "address": "0x4C5Cb5D87709387f8821709f7a6664f00DcF0C93",
       "startBlock": 17769445
+    },
+    "VotingEscrow": {
+      "address": "0x45d117011da1d49ba86af6ced94126488084186f",
+      "startBlock": 18278954
     }
   },
   "goerli": {
@@ -81,6 +85,10 @@
     "RAFTToken": {
       "address": "0x0000000000000000000000000000000000000000",
       "startBlock": 9675791
+    },
+    "VotingEscrow": {
+      "address": "0x0628fFBe2AE5A26F8C95F3de3Ddc957B3b87a27a",
+      "startBlock": 9729564
     }
   },
   "base": {
@@ -123,6 +131,10 @@
     "RAFTToken": {
       "address": "0x0000000000000000000000000000000000000000",
       "startBlock": 3316617
+    },
+    "VotingEscrow": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 4468122
     }
   }
 }
