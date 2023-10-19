@@ -260,3 +260,23 @@ dataSources:
         - event: Withdraw(indexed address,uint256,uint256)
           handler: handleWithdraw
       file: ./src/staking.ts
+  - kind: ethereum
+    name: FeeDistributor
+    network: mainnet
+    source:
+      abi: FeeDistributor
+      address: '0x636c04cfb9e242e7ea8986c6cd0eaa8175cacc21'
+      startBlock: 18283852
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - StakingTransaction
+      abis:
+        - name: FeeDistributor
+          file: ./abis/FeeDistributor.json
+      eventHandlers:
+        - event: TokensClaimed(address,address,uint256,uint256)
+          handler: handleClaim
+      file: ./src/staking.ts
