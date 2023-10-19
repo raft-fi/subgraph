@@ -43,6 +43,10 @@
     "VotingEscrow": {
       "address": "0x45d117011da1d49ba86af6ced94126488084186f",
       "startBlock": 18278954
+    },
+    "FeeDistributor": {
+      "address": "0x636c04cfb9e242e7ea8986c6cd0eaa8175cacc21",
+      "startBlock": 18283852
     }
   },
   "goerli": {
@@ -89,6 +93,10 @@
     "VotingEscrow": {
       "address": "0x0628fFBe2AE5A26F8C95F3de3Ddc957B3b87a27a",
       "startBlock": 9729564
+    },
+    "FeeDistributor": {
+      "address": "0x5D6986aCBfcC32A912Dc37861eA3a6e05D9CAF12",
+      "startBlock": 9769582
     }
   },
   "base": {
@@ -133,6 +141,10 @@
       "startBlock": 3316617
     },
     "VotingEscrow": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 4468122
+    },
+    "FeeDistributor": {
       "address": "0x0000000000000000000000000000000000000000",
       "startBlock": 4468122
     }

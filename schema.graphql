@@ -47,6 +47,7 @@ enum StakingTransactionType {
   INCREASE_LOCK_AMOUNT
   INCREASE_UNLOCK_TIME
   WITHDRAW
+  CLAIM
 }
 
 type StakingTransaction @entity {
@@ -54,6 +55,7 @@ type StakingTransaction @entity {
   type: StakingTransactionType!
   position: Position!
   provider: String!
+  token: String!
   amount: BigInt!
   unlockTime: BigInt
   timestamp: BigInt!
