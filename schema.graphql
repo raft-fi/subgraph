@@ -41,6 +41,24 @@ type BridgeRequestTransaction @entity {
   timestamp: BigInt!
 }
 
+enum StakingTransactionType {
+  DEPOSIT_FOR
+  CREATE_LOCK
+  INCREASE_LOCK_AMOUNT
+  INCREASE_UNLOCK_TIME
+  WITHDRAW
+}
+
+type StakingTransaction @entity {
+  id: ID!
+  type: StakingTransactionType!
+  position: Position!
+  provider: String!
+  amount: BigInt!
+  unlockTime: BigInt
+  timestamp: BigInt!
+}
+
 type Position @entity {
   id: ID!
   underlyingCollateralToken: String
@@ -50,6 +68,7 @@ type Position @entity {
   liquidations: [Liquidation!]! @derivedFrom(field: "position")
   savings: [SavingsTransaction!]! @derivedFrom(field: "position")
   bridgeRequests: [BridgeRequestTransaction!]! @derivedFrom(field: "position")
+  stakings: [StakingTransaction!]! @derivedFrom(field: "position")
 }
 
 type SavingsBalance @entity {

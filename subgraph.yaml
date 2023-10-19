@@ -7,7 +7,7 @@ dataSources:
     network: mainnet
     source:
       abi: PositionManager
-      address: "0x5f59b322eb3e16a0c78846195af1f588b77403fc"
+      address: '0x5f59b322eb3e16a0c78846195af1f588b77403fc'
       startBlock: 17317900
     mapping:
       kind: ethereum/events
@@ -37,7 +37,7 @@ dataSources:
     network: mainnet
     source:
       abi: PositionManagerStETH
-      address: "0x839d6833cee34ffab6fa9057b39f02bd3091a1d6"
+      address: '0x839d6833cee34ffab6fa9057b39f02bd3091a1d6'
       startBlock: 17371259
     mapping:
       kind: ethereum/events
@@ -60,7 +60,7 @@ dataSources:
     network: mainnet
     source:
       abi: PositionManagerWrappedCollateralToken
-      address: "0x29f8abb4cab4bbb56f617d9a3c0f62d33758e74e"
+      address: '0x29f8abb4cab4bbb56f617d9a3c0f62d33758e74e'
       startBlock: 17570096
     mapping:
       kind: ethereum/events
@@ -82,7 +82,7 @@ dataSources:
     network: mainnet
     source:
       abi: ChainlinkPriceAggregatorETH
-      address: "0xE62B71cf983019BFf55bC83B48601ce8419650CC"
+      address: '0xE62B71cf983019BFf55bC83B48601ce8419650CC'
       startBlock: 17229079
     mapping:
       kind: ethereum/events
@@ -102,7 +102,7 @@ dataSources:
     network: mainnet
     source:
       abi: ChainlinkPriceAggregatorStETH
-      address: "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196"
+      address: '0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196'
       startBlock: 17229079
     mapping:
       kind: ethereum/events
@@ -122,7 +122,7 @@ dataSources:
     network: mainnet
     source:
       abi: OneStepLeverageStETH
-      address: "0xB2Bf4De5a63B2225338CdFdBAd045EA62f158b67"
+      address: '0xB2Bf4De5a63B2225338CdFdBAd045EA62f158b67'
       startBlock: 17669930
     mapping:
       kind: ethereum/events
@@ -145,7 +145,7 @@ dataSources:
     network: mainnet
     source:
       abi: RSavings
-      address: "0x2ba26bae6df1153e29813d7f926143f9c94402f3"
+      address: '0x2ba26bae6df1153e29813d7f926143f9c94402f3'
       startBlock: 18041978
     mapping:
       kind: ethereum/events
@@ -170,7 +170,7 @@ dataSources:
     network: mainnet
     source:
       abi: RAFT
-      address: "0x4C5Cb5D87709387f8821709f7a6664f00DcF0C93"
+      address: '0x4C5Cb5D87709387f8821709f7a6664f00DcF0C93'
       startBlock: 17769445
     mapping:
       kind: ethereum/events
@@ -191,7 +191,7 @@ dataSources:
     network: mainnet
     source:
       abi: InterestRatePositionManager
-      address: "0x9AB6b21cDF116f611110b048987E58894786C244"
+      address: '0x9AB6b21cDF116f611110b048987E58894786C244'
       startBlock: 18127534
     mapping:
       kind: ethereum/events
@@ -222,7 +222,7 @@ dataSources:
     network: mainnet
     source:
       abi: CCIPOnRamp
-      address: "0xe2eb229e88f56691e96bb98256707bc62160fe73"
+      address: '0xe2eb229e88f56691e96bb98256707bc62160fe73'
       startBlock: 18029431
     mapping:
       kind: ethereum/events
@@ -238,3 +238,25 @@ dataSources:
         - event: CCIPSendRequested((uint64,uint64,uint256,address,uint64,uint256,bool,address,bytes,(address,uint256)[],address,bytes32))
           handler: handleCCIPSendRequested
       file: ./src/bridge.ts
+  - kind: ethereum
+    name: VotingEscrow
+    network: mainnet
+    source:
+      abi: VotingEscrow
+      address: '0x45d117011da1d49ba86af6ced94126488084186f'
+      startBlock: 18278954
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - StakingTransaction
+      abis:
+        - name: VotingEscrow
+          file: ./abis/VotingEscrow.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256,indexed uint256,uint8,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,uint256,uint256)
+          handler: handleWithdraw
+      file: ./src/staking.ts

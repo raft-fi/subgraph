@@ -330,7 +330,7 @@ export function handleLeveragePositionAdjusted(event: LeveragedPositionAdjusted)
   position.save();
 }
 
-function loadPosition(positionId: string): Position {
+export function loadPosition(positionId: string): Position {
   const savedPosition = Position.load(positionId);
 
   if (savedPosition) {
